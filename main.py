@@ -15,7 +15,7 @@ def main(argv):
 
     res = MyExprVisitor().visitProg(tree)  # Evaluate the expression
 
-    print(input, '=', res)
+    print(res)
 
 
 if __name__ == '__main__':

@@ -1,25 +1,31 @@
 grammar Expr;
 
-prog: stmts EOF;
-//prog: expr EOF;
+prog: expr EOF;
 
-stmts: stmt+;
+expr: create_stmt
+    | insert_stmt
+    | select_stmt
+    ;
 
-stmt: var=ID '=' exp=expr ';'       #assignStmt
-	| 'print(' var=ID ')' ';'       #printStmt
-	;
-expr: left=expr op=('+'|'-') right=expr   #infixExpr
-	| left=expr op=('*'|'/') right=expr   #infixExpr
-	| INT                                 #numberExpr
-	| '(' expr ')'                        #parensExpr
-	;
+create_stmt : 'CREATE' 'table' ID '(' colum_index ',' row_index ')' ;
 
-OP_ADD: '+';
-OP_SUB: '-';
-OP_MUL: '*';
-OP_DIV: '/';
+select_stmt : 'SELECT' colum_index ',' row_index 'FROM' ID ;
 
+insert_stmt : 'INSERT' 'INTO' ID '(' colum_index ',' row_index ',' colum_var ')' ;
+
+colum_var   : STRING ;
+
+colum_index : COL ':' COL
+            | COL
+            ;
+
+row_index   : ROW ':' ROW
+            | ROW
+            ;
+
+ROW     : [1-9]+ ;
+COL     : [A-Z]+ ;
+ID      : [a-z][a-z0-9]+ ;
+STRING  : [A-Za-z0-9]+ ;
+WS      : [ \t\r\n] -> channel(HIDDEN) ;
 NEWLINE : [\r\n]+ ;
-INT     : [0-9]+ ;
-ID      : [a-z][a-z0-9]+;
-WS      : [ \t\r\n] -> channel(HIDDEN);

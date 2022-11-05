@@ -17,57 +17,66 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#stmts.
-    def enterStmts(self, ctx:ExprParser.StmtsContext):
+    # Enter a parse tree produced by ExprParser#expr.
+    def enterExpr(self, ctx:ExprParser.ExprContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#stmts.
-    def exitStmts(self, ctx:ExprParser.StmtsContext):
-        pass
-
-
-    # Enter a parse tree produced by ExprParser#assignStmt.
-    def enterAssignStmt(self, ctx:ExprParser.AssignStmtContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#assignStmt.
-    def exitAssignStmt(self, ctx:ExprParser.AssignStmtContext):
+    # Exit a parse tree produced by ExprParser#expr.
+    def exitExpr(self, ctx:ExprParser.ExprContext):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#printStmt.
-    def enterPrintStmt(self, ctx:ExprParser.PrintStmtContext):
+    # Enter a parse tree produced by ExprParser#create_stmt.
+    def enterCreate_stmt(self, ctx:ExprParser.Create_stmtContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#printStmt.
-    def exitPrintStmt(self, ctx:ExprParser.PrintStmtContext):
-        pass
-
-
-    # Enter a parse tree produced by ExprParser#infixExpr.
-    def enterInfixExpr(self, ctx:ExprParser.InfixExprContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#infixExpr.
-    def exitInfixExpr(self, ctx:ExprParser.InfixExprContext):
+    # Exit a parse tree produced by ExprParser#create_stmt.
+    def exitCreate_stmt(self, ctx:ExprParser.Create_stmtContext):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#numberExpr.
-    def enterNumberExpr(self, ctx:ExprParser.NumberExprContext):
+    # Enter a parse tree produced by ExprParser#select_stmt.
+    def enterSelect_stmt(self, ctx:ExprParser.Select_stmtContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#numberExpr.
-    def exitNumberExpr(self, ctx:ExprParser.NumberExprContext):
+    # Exit a parse tree produced by ExprParser#select_stmt.
+    def exitSelect_stmt(self, ctx:ExprParser.Select_stmtContext):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#parensExpr.
-    def enterParensExpr(self, ctx:ExprParser.ParensExprContext):
+    # Enter a parse tree produced by ExprParser#insert_stmt.
+    def enterInsert_stmt(self, ctx:ExprParser.Insert_stmtContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#parensExpr.
-    def exitParensExpr(self, ctx:ExprParser.ParensExprContext):
+    # Exit a parse tree produced by ExprParser#insert_stmt.
+    def exitInsert_stmt(self, ctx:ExprParser.Insert_stmtContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#colum_var.
+    def enterColum_var(self, ctx:ExprParser.Colum_varContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#colum_var.
+    def exitColum_var(self, ctx:ExprParser.Colum_varContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#colum_index.
+    def enterColum_index(self, ctx:ExprParser.Colum_indexContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#colum_index.
+    def exitColum_index(self, ctx:ExprParser.Colum_indexContext):
+        pass
+
+
+    # Enter a parse tree produced by ExprParser#row_index.
+    def enterRow_index(self, ctx:ExprParser.Row_indexContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#row_index.
+    def exitRow_index(self, ctx:ExprParser.Row_indexContext):
         pass
 
 

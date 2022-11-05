@@ -14,33 +14,38 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#stmts.
-    def visitStmts(self, ctx:ExprParser.StmtsContext):
+    # Visit a parse tree produced by ExprParser#expr.
+    def visitExpr(self, ctx:ExprParser.ExprContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#assignStmt.
-    def visitAssignStmt(self, ctx:ExprParser.AssignStmtContext):
+    # Visit a parse tree produced by ExprParser#create_stmt.
+    def visitCreate_stmt(self, ctx:ExprParser.Create_stmtContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#printStmt.
-    def visitPrintStmt(self, ctx:ExprParser.PrintStmtContext):
+    # Visit a parse tree produced by ExprParser#select_stmt.
+    def visitSelect_stmt(self, ctx:ExprParser.Select_stmtContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#infixExpr.
-    def visitInfixExpr(self, ctx:ExprParser.InfixExprContext):
+    # Visit a parse tree produced by ExprParser#insert_stmt.
+    def visitInsert_stmt(self, ctx:ExprParser.Insert_stmtContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#numberExpr.
-    def visitNumberExpr(self, ctx:ExprParser.NumberExprContext):
+    # Visit a parse tree produced by ExprParser#colum_var.
+    def visitColum_var(self, ctx:ExprParser.Colum_varContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#parensExpr.
-    def visitParensExpr(self, ctx:ExprParser.ParensExprContext):
+    # Visit a parse tree produced by ExprParser#colum_index.
+    def visitColum_index(self, ctx:ExprParser.Colum_indexContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#row_index.
+    def visitRow_index(self, ctx:ExprParser.Row_indexContext):
         return self.visitChildren(ctx)
 
 
