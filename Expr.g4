@@ -1,6 +1,6 @@
 grammar Expr;
 
-prog: expr EOF;
+prog: expr* EOF;
 
 expr: create_stmt
     | insert_stmt
