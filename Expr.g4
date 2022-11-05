@@ -26,6 +26,6 @@ row_index   : ROW ':' ROW
 ROW     : [1-9]+ ;
 COL     : [A-Z]+ ;
 ID      : [a-z][a-z0-9]+ ;
-STRING  : [A-Za-z0-9]+ ;
+STRING  : ["][A-Za-z0-9]+["];
 WS      : [ \t\r\n] -> channel(HIDDEN) ;
 NEWLINE : [\r\n]+ ;
