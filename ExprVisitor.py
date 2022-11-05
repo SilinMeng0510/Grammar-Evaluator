@@ -14,6 +14,21 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#stmts.
+    def visitStmts(self, ctx:ExprParser.StmtsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#assignStmt.
+    def visitAssignStmt(self, ctx:ExprParser.AssignStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ExprParser#printStmt.
+    def visitPrintStmt(self, ctx:ExprParser.PrintStmtContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#infixExpr.
     def visitInfixExpr(self, ctx:ExprParser.InfixExprContext):
         return self.visitChildren(ctx)
