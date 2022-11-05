@@ -6,12 +6,14 @@ class MyExprVisitor(ExprVisitor):
 		super(MyExprVisitor, self).__init__()
 		self.stack = [] # Stack to evaluate the expression
 		self.variables = {} # Dictionary to keep track of the variables
+
 # Visit a parse tree produced by ExprParser#prog.
 # def visitProg(self, ctx:ExprParser.ProgContext):
 #    return self.visit(ctx.expr()) # Just visit the self expression
 	def visitAssignStmt(self, ctx:ExprParser.AssignStmtContext):
 		self.visit(ctx.exp)
 		self.variables[str(ctx.var.text)] = self.stack.pop()
+
 	def visitPrintStmt(self, ctx:ExprParser.PrintStmtContext):
 		var = str(ctx.var.text)
 		if var not in self.variables:
