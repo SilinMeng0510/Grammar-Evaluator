@@ -34,11 +34,6 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ExprParser#colum_var.
-    def visitColum_var(self, ctx:ExprParser.Colum_varContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by ExprParser#colum_index.
     def visitColum_index(self, ctx:ExprParser.Colum_indexContext):
         return self.visitChildren(ctx)

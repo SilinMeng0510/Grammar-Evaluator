@@ -53,15 +53,6 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#colum_var.
-    def enterColum_var(self, ctx:ExprParser.Colum_varContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#colum_var.
-    def exitColum_var(self, ctx:ExprParser.Colum_varContext):
-        pass
-
-
     # Enter a parse tree produced by ExprParser#colum_index.
     def enterColum_index(self, ctx:ExprParser.Colum_indexContext):
         pass

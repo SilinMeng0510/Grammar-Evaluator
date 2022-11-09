@@ -11,17 +11,11 @@ create_stmt : 'CREATE' 'table' ID '(' colum_index ',' row_index ')' ;
 
 select_stmt : 'SELECT' colum_index ',' row_index 'FROM' ID ;
 
-insert_stmt : 'INSERT' 'INTO' ID '(' colum_index ',' row_index ',' colum_var ')' ;
+insert_stmt : 'INSERT' 'INTO' ID '(' colum_index ',' row_index ',' STRING ')' ;
 
-colum_var   : STRING ;
+colum_index : COL ':' COL ;
 
-colum_index : COL ':' COL
-            | COL
-            ;
-
-row_index   : ROW ':' ROW
-            | ROW
-            ;
+row_index   : ROW ':' ROW ;
 
 ROW     : [1-9]+ ;
 COL     : [A-Z]+ ;
