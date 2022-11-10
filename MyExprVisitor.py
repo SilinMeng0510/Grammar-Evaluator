@@ -9,6 +9,8 @@ class MyExprVisitor(ExprVisitor):
         self.ctx = {'Create' : None , 'Insert' : None , 'Select' : None}
         self.stack = []
         self.val = None
+        self.registered_colum = []
+        self.registered_row = []
 
     # Visit a parse tree produced by ExprParser#prog.
     def visitProg(self, ctx: ExprParser.ProgContext):
@@ -48,11 +50,16 @@ class MyExprVisitor(ExprVisitor):
     def visitColum_index(self, ctx: ExprParser.Colum_indexContext):
         start = str(ctx.COL()[0])
         end = str(ctx.COL()[1])
+        if ord(start) > ord(end):
+            raise ValueError(f"error: {start} is bigger than {end}, invalid sequence in column")
 
         if ctx.parentCtx == self.ctx['Create']:
             col_arr = []
             for column in range(ord(start), ord(end) + 1):
-                col_arr.append(chr(column))
+                if chr(column) in self.registered_colum:
+                    raise ValueError(f"error: column {chr(column)} is registered")
+                else:
+                    col_arr.append(chr(column))
             self.stack.append(col_arr)
         elif ctx.parentCtx == self.ctx['Select']:
             col_arr = []
@@ -71,13 +78,20 @@ class MyExprVisitor(ExprVisitor):
     def visitRow_index(self, ctx: ExprParser.Row_indexContext):
         start = str(ctx.ROW()[0])
         end = str(ctx.ROW()[1])
+        if ord(start) > ord(end):
+            raise ValueError(f"error: {start} is bigger than {end}, invalid sequence in row")
 
         if ctx.parentCtx == self.ctx['Create']:
             col_arr = self.stack.pop()
             row_arr = []
             for row in range(ord(start), ord(end) + 1):
-                row_arr.append(chr(row))
+                if chr(row) in self.registered_row:
+                    raise ValueError(f"error: row {chr(row)} is registered")
+                else:
+                    row_arr.append(chr(row))
             self.data[str(ctx.parentCtx.ID())] = pd.DataFrame(None, col_arr, row_arr)
+            self.registered_colum.extend(col_arr)
+            self.registered_row.extend(row_arr)
         elif ctx.parentCtx == self.ctx['Select']:
             col_arr = self.stack.pop()
             row_arr = []
@@ -92,6 +106,5 @@ class MyExprVisitor(ExprVisitor):
                 row_arr.append(chr(row))
             df = self.data[str(ctx.parentCtx.ID())]
             df.loc[col_arr, row_arr] = self.val
-
 
         return self.visitChildren(ctx)
