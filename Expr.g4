@@ -5,6 +5,7 @@ prog: expr* EOF;
 expr: create_stmt
     | insert_stmt
     | select_stmt
+    | delete_stmt
     ;
 
 create_stmt : 'CREATE' 'table' ID '(' colum_index ',' row_index ')' ;
@@ -12,6 +13,8 @@ create_stmt : 'CREATE' 'table' ID '(' colum_index ',' row_index ')' ;
 select_stmt : 'SELECT' colum_index ',' row_index 'FROM' ID ;
 
 insert_stmt : 'INSERT' 'INTO' ID '(' colum_index ',' row_index ',' STRING ')' ;
+
+delete_stmt: 'DELETE' ID ;
 
 colum_index : COL ':' COL ;
 

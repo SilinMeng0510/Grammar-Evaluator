@@ -34,6 +34,11 @@ class ExprVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ExprParser#delete_stmt.
+    def visitDelete_stmt(self, ctx:ExprParser.Delete_stmtContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ExprParser#colum_index.
     def visitColum_index(self, ctx:ExprParser.Colum_indexContext):
         return self.visitChildren(ctx)

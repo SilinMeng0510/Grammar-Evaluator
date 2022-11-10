@@ -46,6 +46,18 @@ class MyExprVisitor(ExprVisitor):
             self.ctx['Insert'] = ctx
         return self.visitChildren(ctx)
 
+    # Visit a parse tree produced by ExprParser#delete_stmt.
+    def visitDelete_stmt(self, ctx:ExprParser.Delete_stmtContext):
+        table_id = str(ctx.ID())
+        self.tables.remove(table_id)
+        df = self.data[table_id]
+        del self.data[table_id]
+        for column in list(df.columns):
+            self.registered_colum.remove(column)
+        for row in list(df.index):
+            self.registered_row.remove(row)
+        return self.visitChildren(ctx)
+
     # Visit a parse tree produced by ExprParser#colum_index.
     def visitColum_index(self, ctx: ExprParser.Colum_indexContext):
         start = str(ctx.COL()[0])
@@ -89,7 +101,7 @@ class MyExprVisitor(ExprVisitor):
                     raise ValueError(f"error: row {chr(row)} is registered")
                 else:
                     row_arr.append(chr(row))
-            self.data[str(ctx.parentCtx.ID())] = pd.DataFrame(None, col_arr, row_arr)
+            self.data[str(ctx.parentCtx.ID())] = pd.DataFrame(None, row_arr, col_arr)
             self.registered_colum.extend(col_arr)
             self.registered_row.extend(row_arr)
         elif ctx.parentCtx == self.ctx['Select']:
@@ -98,13 +110,16 @@ class MyExprVisitor(ExprVisitor):
             for row in range(ord(start), ord(end) + 1):
                 row_arr.append(chr(row))
             df = self.data[str(ctx.parentCtx.ID())]
-            print(df.loc[col_arr,row_arr])
+            print(df.loc[row_arr,col_arr])
         elif ctx.parentCtx == self.ctx['Insert']:
             col_arr = self.stack.pop()
             row_arr = []
             for row in range(ord(start), ord(end) + 1):
                 row_arr.append(chr(row))
             df = self.data[str(ctx.parentCtx.ID())]
-            df.loc[col_arr, row_arr] = self.val
+            for column in col_arr:
+                if column not in list(df.columns):
+                    raise ValueError(f"error: column {column} is not included in table")
+            df.loc[row_arr, col_arr] = self.val
 
         return self.visitChildren(ctx)
