@@ -62,6 +62,15 @@ class ExprListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by ExprParser#delete_data_stmt.
+    def enterDelete_data_stmt(self, ctx:ExprParser.Delete_data_stmtContext):
+        pass
+
+    # Exit a parse tree produced by ExprParser#delete_data_stmt.
+    def exitDelete_data_stmt(self, ctx:ExprParser.Delete_data_stmtContext):
+        pass
+
+
     # Enter a parse tree produced by ExprParser#colum_index.
     def enterColum_index(self, ctx:ExprParser.Colum_indexContext):
         pass

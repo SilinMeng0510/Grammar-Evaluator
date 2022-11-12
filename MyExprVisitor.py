@@ -2,11 +2,12 @@ from ExprParser import ExprParser
 from ExprVisitor import ExprVisitor
 import pandas as pd
 
+
 class MyExprVisitor(ExprVisitor):
     def __init__(self):
         self.tables = []
         self.data = {}
-        self.ctx = {'Create' : None , 'Insert' : None , 'Select' : None}
+        self.ctx = {'Create': None, 'Insert': None, 'Select': None, 'Delete': None}
         self.stack = []
         self.val = None
         self.registered_colum = []
@@ -18,6 +19,7 @@ class MyExprVisitor(ExprVisitor):
 
     # Visit a parse tree produced by ExprParser#create_stmt.
     def visitCreate_stmt(self, ctx: ExprParser.Create_stmtContext):
+        #import pdb;pdb.set_trace()
         table_id = str(ctx.ID())
         if table_id in self.tables:
             raise ValueError(f"error: table {ctx.ID()} is already created")
@@ -33,6 +35,11 @@ class MyExprVisitor(ExprVisitor):
         if table_id not in self.tables:
             raise ValueError(f"error: table {ctx.ID()} is not created")
         else:
+            #import pdb;pdb.set_trace()
+            if len(ctx.COL()) > 0:
+                self.val = str(ctx.COL(0))
+            else:
+                self.val = None
             self.ctx['Select'] = ctx
         return self.visitChildren(ctx)
 
@@ -47,7 +54,7 @@ class MyExprVisitor(ExprVisitor):
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by ExprParser#delete_stmt.
-    def visitDelete_stmt(self, ctx:ExprParser.Delete_stmtContext):
+    def visitDelete_stmt(self, ctx: ExprParser.Delete_stmtContext):
         table_id = str(ctx.ID())
         self.tables.remove(table_id)
         df = self.data[table_id]
@@ -56,6 +63,15 @@ class MyExprVisitor(ExprVisitor):
             self.registered_colum.remove(column)
         for row in list(df.index):
             self.registered_row.remove(row)
+        return self.visitChildren(ctx)
+
+    def visitDelete_data_stmt(self, ctx: ExprParser.Delete_stmtContext):
+        table_id = str(ctx.ID())
+        if table_id not in self.tables:
+            raise ValueError(f"error: table {ctx.ID()} is not created")
+        else:
+            self.val = None
+            self.ctx['Delete'] = ctx
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by ExprParser#colum_index.
@@ -83,7 +99,11 @@ class MyExprVisitor(ExprVisitor):
             for column in range(ord(start), ord(end) + 1):
                 col_arr.append(chr(column))
             self.stack.append(col_arr)
-
+        elif ctx.parentCtx == self.ctx['Delete']:
+            col_arr = []
+            for column in range(ord(start), ord(end) + 1):
+                col_arr.append(chr(column))
+            self.stack.append(col_arr)
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by ExprParser#row_index.
@@ -110,7 +130,11 @@ class MyExprVisitor(ExprVisitor):
             for row in range(ord(start), ord(end) + 1):
                 row_arr.append(chr(row))
             df = self.data[str(ctx.parentCtx.ID())]
-            print(df.loc[row_arr,col_arr])
+            #import pdb;pdb.set_trace()
+            if self.val is not None:
+                print(df.loc[row_arr, col_arr].sort_values(by=self.val))
+            else:
+                print(df.loc[row_arr, col_arr])
         elif ctx.parentCtx == self.ctx['Insert']:
             col_arr = self.stack.pop()
             row_arr = []
@@ -121,5 +145,14 @@ class MyExprVisitor(ExprVisitor):
                 if column not in list(df.columns):
                     raise ValueError(f"error: column {column} is not included in table")
             df.loc[row_arr, col_arr] = self.val
-
+        elif ctx.parentCtx == self.ctx['Delete']:
+            col_arr = self.stack.pop()
+            row_arr = []
+            for row in range(ord(start), ord(end) + 1):
+                row_arr.append(chr(row))
+            df = self.data[str(ctx.parentCtx.ID())]
+            for column in col_arr:
+                if column not in list(df.columns):
+                    raise ValueError(f"error: column {column} is not included in table")
+            df.loc[row_arr, col_arr] = self.val
         return self.visitChildren(ctx)

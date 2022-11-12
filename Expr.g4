@@ -6,19 +6,22 @@ expr: create_stmt
     | insert_stmt
     | select_stmt
     | delete_stmt
+    | delete_data_stmt
     ;
 
-create_stmt : 'CREATE' 'table' ID '(' colum_index ',' row_index ')' ;
+create_stmt : 'CREATE' 'table' ID '(' colum_index ',' row_index ')';
 
-select_stmt : 'SELECT' colum_index ',' row_index 'FROM' ID ;
+select_stmt : 'SELECT' colum_index ',' row_index 'FROM' ID ('ORDER' COL)*;
 
-insert_stmt : 'INSERT' 'INTO' ID '(' colum_index ',' row_index ',' STRING ')' ;
+insert_stmt : 'INSERT' 'INTO' ID '(' colum_index ',' row_index ',' STRING ')';
 
-delete_stmt: 'DELETE' ID ;
+delete_stmt : 'DELETE' ID ;
+
+delete_data_stmt: 'DELETE' 'table' ID '(' colum_index ',' row_index ')';
 
 colum_index : COL ':' COL ;
 
-row_index   : ROW ':' ROW ;
+row_index   : ROW ':' ROW;
 
 ROW     : [1-9]+ ;
 COL     : [A-Z]+ ;
