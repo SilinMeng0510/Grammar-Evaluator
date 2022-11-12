@@ -56,13 +56,16 @@ class MyExprVisitor(ExprVisitor):
     # Visit a parse tree produced by ExprParser#delete_stmt.
     def visitDelete_stmt(self, ctx: ExprParser.Delete_stmtContext):
         table_id = str(ctx.ID())
-        self.tables.remove(table_id)
-        df = self.data[table_id]
-        del self.data[table_id]
-        for column in list(df.columns):
-            self.registered_colum.remove(column)
-        for row in list(df.index):
-            self.registered_row.remove(row)
+        if table_id not in self.tables:
+            raise ValueError(f"error: table {ctx.ID()} is not created")
+        else:
+            self.tables.remove(table_id)
+            df = self.data[table_id]
+            del self.data[table_id]
+            for column in list(df.columns):
+                self.registered_colum.remove(column)
+            for row in list(df.index):
+                self.registered_row.remove(row)
         return self.visitChildren(ctx)
 
     def visitDelete_data_stmt(self, ctx: ExprParser.Delete_stmtContext):
