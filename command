@@ -9,8 +9,6 @@ DELETE table students(A : A, 1 : 1)
 SELECT A : A, 1 : 3 FROM students
 INSERT INTO students(A : A , 1 : 1, "mike")
 SELECT A : A, 1 : 3 FROM students
-DELETE jobs
-DELETE jobs
 CREATE table jobs(D : F , 4 : 6)
 SELECT D : F, 4 : 6 FROM jobs
 DELETE students
