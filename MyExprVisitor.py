@@ -10,6 +10,7 @@ class MyExprVisitor(ExprVisitor):
         self.ctx = {'Create': None, 'Insert': None, 'Select': None, 'Delete': None}
         self.stack = []
         self.val = None
+        self.desc = False
         self.registered_colum = []
         self.registered_row = []
 
@@ -37,7 +38,11 @@ class MyExprVisitor(ExprVisitor):
         else:
             #import pdb;pdb.set_trace()
             if len(ctx.COL()) > 0:
-                self.val = str(ctx.COL(0))
+                if str(ctx.BOOL(0)) == 't':
+                    self.val = str(ctx.COL(0))
+                    self.desc = True
+                elif str(ctx.BOOL(0)) == 'f':
+                    self.val = str(ctx.COL(0))
             else:
                 self.val = None
             self.ctx['Select'] = ctx
@@ -132,7 +137,11 @@ class MyExprVisitor(ExprVisitor):
             df = self.data[str(ctx.parentCtx.ID())]
             #import pdb;pdb.set_trace()
             if self.val is not None:
-                print(df.loc[row_arr, col_arr].sort_values(by=self.val))
+                if self.desc:
+                    print(df.loc[row_arr, col_arr].sort_values(by=self.val, ascending=False))
+                    self.desc = False
+                elif not self.desc:
+                    print(df.loc[row_arr, col_arr].sort_values(by=self.val))
             else:
                 print(df.loc[row_arr, col_arr])
         elif ctx.parentCtx == self.ctx['Insert']:
