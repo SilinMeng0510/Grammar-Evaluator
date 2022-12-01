@@ -11,7 +11,7 @@ expr: create_stmt
 
 create_stmt : 'CREATE' 'table' ID '(' colum_index ',' row_index ')';
 
-select_stmt : 'SELECT' colum_index ',' row_index 'FROM' ID ('ORDER' COL)*;
+select_stmt : 'SELECT' colum_index ',' row_index 'FROM' ID ('ORDER' COL BOOL)* ;
 
 insert_stmt : 'INSERT' 'INTO' ID '(' colum_index ',' row_index ',' STRING ')';
 
@@ -29,3 +29,4 @@ ID      : [a-z][a-z0-9]+ ;
 STRING  : ["][A-Za-z0-9]+["];
 WS      : [ \t\r\n] -> channel(HIDDEN) ;
 NEWLINE : [\r\n]+ ;
+BOOL    : [t,f]+ ;

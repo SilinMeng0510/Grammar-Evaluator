@@ -10,6 +10,10 @@ class MyExprVisitor(ExprVisitor):
         self.ctx = {'Create': None, 'Insert': None, 'Select': None, 'Delete': None}
         self.stack = []
         self.val = None
+        self.val1 = None
+        self.val2 = None
+        self.desc1 = False
+        self.desc2 = False
         self.registered_colum = []
         self.registered_row = []
 
@@ -36,10 +40,28 @@ class MyExprVisitor(ExprVisitor):
             raise ValueError(f"error: table {ctx.ID()} is not created")
         else:
             #import pdb;pdb.set_trace()
-            if len(ctx.COL()) > 0:
-                self.val = str(ctx.COL(0))
+            if len(ctx.COL()) == 1:
+                if str(ctx.BOOL(0)) == 't':
+                    self.val1 = str(ctx.COL(0))
+                    self.desc1 = True
+                elif str(ctx.BOOL(0)) == 'f':
+                    self.val1 = str(ctx.COL(0))
+                    self.desc1 = False
+            elif len(ctx.COL()) == 2:
+                if str(ctx.BOOL(0)) == 't':
+                    self.val1 = str(ctx.COL(0))
+                    self.desc1 = True
+                elif str(ctx.BOOL(0)) == 'f':
+                    self.val1 = str(ctx.COL(0))
+                    self.desc1 = False
+                if str(ctx.BOOL(1)) == 't':
+                    self.val2 = str(ctx.COL(1))
+                    self.desc2 = True
+                elif str(ctx.BOOL(1)) == 'f':
+                    self.val2 = str(ctx.COL(1))
+                    self.desc2 = False
             else:
-                self.val = None
+                self.val1 = None
             self.ctx['Select'] = ctx
         return self.visitChildren(ctx)
 
@@ -57,7 +79,7 @@ class MyExprVisitor(ExprVisitor):
     def visitDelete_stmt(self, ctx: ExprParser.Delete_stmtContext):
         table_id = str(ctx.ID())
         if table_id not in self.tables:
-            raise ValueError(f"error: table {ctx.ID()} is not created")
+            raise ValueError(f"error: table {ctx.ID()} is not existed")
         else:
             self.tables.remove(table_id)
             df = self.data[table_id]
@@ -134,8 +156,16 @@ class MyExprVisitor(ExprVisitor):
                 row_arr.append(chr(row))
             df = self.data[str(ctx.parentCtx.ID())]
             #import pdb;pdb.set_trace()
-            if self.val is not None:
-                print(df.loc[row_arr, col_arr].sort_values(by=self.val))
+            if self.val1 is not None:
+                if self.val2 is not None:
+                    #import pdb;pdb.set_trace()
+                    print(df.loc[row_arr, col_arr].sort_values(by=[self.val1, self.val2], ascending=[self.desc1, self.desc2]))
+                    self.desc1 = False
+                    self.desc2 = False
+                elif self.val2 is None:
+                    #import pdb;pdb.set_trace()
+                    print(df.loc[row_arr, col_arr].sort_values(by=self.val1, ascending=self.desc1))
+                    self.desc1 = False
             else:
                 print(df.loc[row_arr, col_arr])
         elif ctx.parentCtx == self.ctx['Insert']:
