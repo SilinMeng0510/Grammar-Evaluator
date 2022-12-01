@@ -23,10 +23,10 @@ colum_index : COL ':' COL ;
 
 row_index   : ROW ':' ROW;
 
+BOOL    : [t,f] ;
 ROW     : [1-9]+ ;
 COL     : [A-Z]+ ;
 ID      : [a-z][a-z0-9]+ ;
 STRING  : ["][A-Za-z0-9]+["];
 WS      : [ \t\r\n] -> channel(HIDDEN) ;
 NEWLINE : [\r\n]+ ;
-BOOL    : [t,f]+ ;
